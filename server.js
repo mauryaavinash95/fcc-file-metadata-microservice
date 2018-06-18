@@ -20,12 +20,10 @@ const storage = multer.diskStorage({
 		cb(null, destination);
 	},
 	filename: (req, file, cb) => {
-		let username = file.originalname;
-		let savedFileName = file.originalname;
+		req.body.filename = file.originalname;
 		req.body.file = file;
-		req.body.file.savedFileName = savedFileName;
-		req.body.file.username = username;
-		cb(null, savedFileName);
+		req.body.mimeType = file.mimetype;
+		cb(null, req.body.filename);
 	}
 });
 const upload = multer({ storage: storage });
@@ -43,10 +41,10 @@ app.post("/api/upload", function(request, response){
     upload.single('upfile')(request, response, (err) => {
 			if (err) {
 				console.log("Error while uploading file: ", err);
-				response.sendJson("There was some error while uploading file", 400);
+				response.send("There was some error while uploading file");
 			}
 			else {
-				console.log(`File saved successfully for`);
+        response.send({"name": request.body.filename,"type":request.body.mimeType,"size":request.file.size})
 			}
 		});
 })
