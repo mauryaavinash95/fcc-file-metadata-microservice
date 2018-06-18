@@ -50,6 +50,7 @@ app.post("/api/upload", function(request, response, next){
 			}
 		});
 }, function(request, response){
+    console.log("Request : ", request.body);
     response.send({"name": request.body.filename,"type":request.body.mimeType,"size":request.file.size})
 })
 
