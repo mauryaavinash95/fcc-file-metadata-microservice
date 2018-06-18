@@ -20,6 +20,7 @@ const storage = multer.diskStorage({
 		cb(null, destination);
 	},
 	filename: (req, file, cb) => {
+    console.log("Request is: ", req);
 		req.body.filename = file.originalname;
 		req.body.file = file;
 		req.body.mimeType = file.mimetype;
@@ -37,16 +38,19 @@ app.get("/", function (request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
-app.post("/api/upload", function(request, response){
+app.post("/api/upload", function(request, response, next){
     upload.single('upfile')(request, response, (err) => {
 			if (err) {
 				console.log("Error while uploading file: ", err);
 				response.send("There was some error while uploading file");
 			}
 			else {
-        response.send({"name": request.body.filename,"type":request.body.mimeType,"size":request.file.size})
+        console.log("File uploaded successfully");
+        next();
 			}
 		});
+}, function(request, response){
+    response.send({"name": request.body.filename,"type":request.body.mimeType,"size":request.file.size})
 })
 
 // listen for requests :)
