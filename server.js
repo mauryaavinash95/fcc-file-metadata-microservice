@@ -35,8 +35,8 @@ app.use(express.static('public'));
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", function (request, response) {
-  // response.sendFile(__dirname + '/views/index.html');
-  response.send("Hit /api/upload with file content.");
+  response.sendFile(__dirname + '/views/index.html');
+  // response.send("Hit /api/upload with file content.");
 });
 
 app.post("/api/upload", function(request, response, next){
